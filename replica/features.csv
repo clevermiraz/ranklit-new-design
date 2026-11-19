@@ -1,0 +1,26 @@
+feature,area,priority,original,clone,notes
+Google OAuth connect to Business Profile,onboarding,must,yes,no,needs GBP API approval
+Subscription billing with 3-day trial (Polar),billing,must,yes,no,$99 / $199 per location; original uses Stripe
+Geo-grid rank scan (49 points) and heat map,rank tracking,must,yes,no,weekly + on demand
+Keyword management,rank tracking,must,yes,no,10 / 20 per plan
+Scan credits and top-up,rank tracking,should,yes,no,cost control
+Weekly rank email,reporting,must,yes,no,
+Activity feed,dashboard,must,yes,no,
+AI Google posts 3x/week,automation,must,yes,no,optional approval
+AI replies to 4-5 star reviews,automation,must,yes,no,opt in
+Automation toggles,automation,must,yes,no,
+Review landing page + QR code,reviews,should,yes,no,
+Review widget for website,reviews,could,yes,no,
+Review request email campaigns,reviews,should,yes,no,Growth: 250/mo
+Monthly GBP audit with auto-fixes,audit,should,yes,no,hours/photos/services/categories
+Monthly report,reporting,should,yes,no,
+Multi-location + plan changes,billing,should,yes,no,
+Auto citations (500+),listings,could,yes,no,aggregator vendor
+Listings sync (Apple Maps/Bing/Waze),listings,could,yes,no,Growth
+AI visibility tracking,ai search,could,yes,no,ChatGPT/Claude/Perplexity/Google AI
+Local schema + Google Maps embed snippet,website,could,yes,no,
+SMS account notices,notifications,could,yes,no,
+White-label agency portal,agency,could,yes,no,later
+Hand-placed premium citations,service,skip,yes,no,human labor
+Dedicated account manager,service,skip,yes,no,human labor
+Facebook/Instagram posting,social,skip,coming soon,no,not even live

@@ -1,0 +1,28 @@
+/* BACKUP: dark theme v1 ("bright stickers on black"). Not imported.
+   To restore: replace the dark-theme block in globals.css (between the 'Dark theme' comment and '@layer base') with this. */
+/* Dark theme: swap the page tokens. data-theme is set before paint by the script in layout.tsx. */
+:root {
+  --pop: #1a1523;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --pop: #8d3ebb;
+  --color-ink: #f3eefb;
+  --color-ink-2: #b9b0c8;
+  --color-paper: #15111d;
+  --color-paper-2: #1d1827;
+  --color-night: #0b0911;
+}
+/* Light islands: white and candy surfaces keep light-theme tokens (dark text and outlines) in both themes. */
+[data-theme="dark"] :is(.bg-white, .bg-lime, .bg-sun, .bg-bubblegum, .bg-sky, .bg-mint, .bg-tangerine, .marker, .hover\:bg-sun:hover) {
+  --color-ink: #1a1523;
+  --color-ink-2: #5b5367;
+  --color-paper: #fff8ec;
+  --color-paper-2: #fdeed6;
+  color: var(--color-ink);
+}
+/* The swipe must cover the whole word once the text under it is dark. */
+[data-theme="dark"] .marker {
+  --marker-from: 4%;
+}
+

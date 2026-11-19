@@ -1,0 +1,55 @@
+/* BACKUP: dark theme v2 ("calm tinted surfaces", skill-based). Not imported.
+   To restore: replace the dark-theme block in globals.css (from the 'Dark theme' comment down to 'Smooth theme switch') with this,
+   and in page.tsx set the header's dark class back to dark:bg-[#221d2b]/90 and remove the hero glow div. */
+/* Dark theme v2. data-theme is set before paint by the script in layout.tsx. Backup of v1: theme-dark-v1.css.
+   Follows dark-mode practice: elevation by lighter surfaces (no hard shadows), desaturated accents,
+   off-white text, subtle borders, no large bright areas. */
+:root {
+  --pop: #1a1523;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --pop: transparent;
+  --s1: #1c1823; /* cards */
+  --s2: #252030; /* raised: header, cards in cards, open FAQ */
+  --line: rgb(255 255 255 / 0.13);
+  --color-ink: #ebe7f0;
+  --color-ink-2: #aaa3b6;
+  --color-paper: #131017;
+  --color-paper-2: #17131d;
+  --color-night: #0e0c12;
+  /* accents, ~15% less saturated */
+  --color-lime: #b6d64a;
+  --color-sun: #e9c55c;
+  --color-bubblegum: #e3a3c7;
+  --color-sky: #96c5e3;
+  --color-mint: #9bd5b9;
+  --color-tangerine: #e68d5f;
+}
+[data-theme="dark"] .border-ink { border-color: var(--line); }
+[data-theme="dark"] .bg-white { background-color: var(--s1); }
+[data-theme="dark"] :is(.bg-white, .tint) .bg-white,
+[data-theme="dark"] details[open] { background-color: var(--s2); }
+
+/* Small candy accents (buttons, badges, chips) stay bright with dark text. */
+[data-theme="dark"] :is(.bg-lime, .bg-sun, .bg-bubblegum, .bg-sky, .bg-mint, .bg-tangerine):not(.tint),
+[data-theme="dark"] .hover\:bg-sun:hover {
+  --color-ink: #1a1523;
+  --color-ink-2: #463f52;
+  color: var(--color-ink);
+  border-color: rgb(0 0 0 / 0.28);
+}
+/* Large candy areas (.tint) become deep tinted surfaces with a coloured edge; text stays light. */
+[data-theme="dark"] .tint.bg-lime { background-color: color-mix(in oklab, var(--color-lime) 18%, var(--s1)); border-color: color-mix(in oklab, var(--color-lime) 40%, transparent); }
+[data-theme="dark"] .tint.bg-sun { background-color: color-mix(in oklab, var(--color-sun) 18%, var(--s1)); border-color: color-mix(in oklab, var(--color-sun) 40%, transparent); }
+[data-theme="dark"] .tint.bg-bubblegum { background-color: color-mix(in oklab, var(--color-bubblegum) 18%, var(--s1)); border-color: color-mix(in oklab, var(--color-bubblegum) 40%, transparent); }
+[data-theme="dark"] .tint.bg-sky { background-color: color-mix(in oklab, var(--color-sky) 18%, var(--s1)); border-color: color-mix(in oklab, var(--color-sky) 40%, transparent); }
+[data-theme="dark"] .tint.bg-mint { background-color: color-mix(in oklab, var(--color-mint) 18%, var(--s1)); border-color: color-mix(in oklab, var(--color-mint) 40%, transparent); }
+[data-theme="dark"] .tint.bg-brand-600 { background-color: color-mix(in oklab, var(--color-brand-600) 26%, var(--s1)); border-color: color-mix(in oklab, var(--color-brand-400) 40%, transparent); }
+
+[data-theme="dark"] .bg-white\/70 { background-color: rgb(255 255 255 / 0.16); } /* sticky-note tape */
+/* Highlighted words: coloured text instead of a bright swipe. */
+[data-theme="dark"] .marker { background-image: none; color: var(--marker) !important; }
+/* Maps and scans are imagery: dim them. */
+[data-theme="dark"] .map-dim { filter: brightness(0.62) saturate(0.85); }
+

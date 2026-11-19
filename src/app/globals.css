@@ -1,0 +1,335 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --font-sans: var(--font-inter-tight), Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+
+  /* "Sticker map": warm paper, ink outlines, candy pops. */
+  --color-ink: #1a1523;
+  --color-ink-2: #5b5367;
+  --color-paper: #fff8ec;
+  --color-paper-2: #fdeed6;
+  --color-night: #1a1523;
+
+  --color-lime: #c6f432;
+  --color-sun: #ffd23f;
+  --color-tangerine: #ff7a3d;
+  --color-bubblegum: #ff9ed2;
+  --color-sky: #8fd3ff;
+  --color-mint: #9df0c8;
+
+  --color-brand-50: #fbf3fe;
+  --color-brand-100: #f6e6fc;
+  --color-brand-200: #ecccf7;
+  --color-brand-300: #dca6ef;
+  --color-brand-400: #c47ae3;
+  --color-brand-500: #b95fe0;
+  --color-brand-600: #9b47cc;
+  --color-brand-700: #8d3ebb;
+  --color-brand-800: #6f2d99;
+
+  --color-rank-good: #16a34a;
+  --color-rank-mid: #f59e0b;
+  --color-rank-bad: #ef4444;
+
+  /* Hard offset shadows: the whole look hangs on these. */
+  /* --pop is set per theme on :root (not per surface), so hard shadows stay visible on any background. */
+  --shadow-pop-sm: 2px 2px 0 var(--pop);
+  --shadow-pop: 4px 4px 0 var(--pop);
+  --shadow-pop-lg: 8px 8px 0 var(--pop);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-rise: rise 700ms var(--ease-out) both;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-ping-once: ping-once 1400ms var(--ease-out) both;
+  --animate-bob: bob 4s ease-in-out infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+  --animate-words: words 12s var(--ease-spring) infinite;
+  --animate-draw: draw 900ms var(--ease-in-out) 700ms both;
+  --animate-pop: pop 550ms var(--ease-spring) both;
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(18px) rotate(-1deg); }
+  }
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+  @keyframes ping-once {
+    from { opacity: 0.55; transform: scale(0.15); }
+    to { opacity: 0; transform: scale(1.5); }
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+    50% { transform: translateY(-12px) rotate(calc(var(--r, 0deg) * -1)); }
+  }
+  /* 6 words + a repeat of the first, 1.25em tall each. */
+  @keyframes words {
+    0%, 13% { transform: translateY(0); }
+    16.66%, 29.66% { transform: translateY(-1.25em); }
+    33.33%, 46.33% { transform: translateY(-2.5em); }
+    50%, 63% { transform: translateY(-3.75em); }
+    66.66%, 79.66% { transform: translateY(-5em); }
+    83.33%, 96.33% { transform: translateY(-6.25em); }
+    100% { transform: translateY(-7.5em); }
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.6) rotate(-6deg); }
+  }
+  @keyframes draw {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes wiggle {
+    0%, 100% { rotate: 0deg; }
+    25% { rotate: -6deg; }
+    75% { rotate: 6deg; }
+  }
+}
+
+/* Dark theme v3 "lime night glow" (inspired by Lime Duo / H2 on darkmodedesign.com).
+   Light is the default; dark is opt-in via the toggle. data-theme is set before paint in layout.tsx.
+   Backups: theme-dark-v1.css (bright stickers), theme-dark-v2.css (calm tinted surfaces).
+   Rules: neutral black + faint grid, one light source (lime/purple glow), glassy hairline cards,
+   accents glow instead of casting hard shadows, off-white text, no large bright areas. */
+:root {
+  --pop: #1a1523;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --pop: transparent;
+  --s1: #121214; /* glass cards */
+  --s2: #19191d; /* raised: header, cards in cards, open FAQ */
+  --line: rgb(255 255 255 / 0.09);
+  --glass: linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0) 45%);
+  --color-ink: #f2f1ee;
+  --color-ink-2: #a3a3ab;
+  --color-paper: #0a0a0b;
+  --color-paper-2: #0d0d0f;
+  --color-night: #060607;
+  /* lime stays full strength: it is the light source. Others ~15% calmer. */
+  --color-sun: #e9c55c;
+  --color-bubblegum: #e3a3c7;
+  --color-sky: #96c5e3;
+  --color-mint: #9bd5b9;
+  --color-tangerine: #e68d5f;
+}
+[data-theme="dark"] .border-ink { border-color: var(--line); }
+
+/* Glass cards: near-black, hairline edge, faint top highlight. */
+[data-theme="dark"] .bg-white {
+  background-color: var(--s1);
+  background-image: var(--glass);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+[data-theme="dark"] :is(.bg-white, .tint) .bg-white,
+[data-theme="dark"] details[open] { background-color: var(--s2); }
+
+/* Faint grid instead of dots. */
+[data-theme="dark"] .bg-dots {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Small candy accents (chips, badges, step numbers) stay bright with dark text. */
+[data-theme="dark"] :is(.bg-lime, .bg-sun, .bg-bubblegum, .bg-sky, .bg-mint, .bg-tangerine):not(.tint),
+[data-theme="dark"] .hover\:bg-sun:hover {
+  --color-ink: #1a1523;
+  --color-ink-2: #463f52;
+  color: var(--color-ink);
+  border-color: rgb(0 0 0 / 0.28);
+}
+
+/* Large candy areas (.tint): black glass with their colour glowing in from the top edge. */
+[data-theme="dark"] .tint {
+  --tint: var(--color-lime);
+  background-color: var(--s1);
+  background-image: radial-gradient(85% 65% at 50% -8%, color-mix(in oklab, var(--tint) 30%, transparent), transparent 72%);
+  border-color: color-mix(in oklab, var(--tint) 32%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--tint) 35%, transparent);
+}
+[data-theme="dark"] .tint.bg-sun { --tint: var(--color-sun); }
+[data-theme="dark"] .tint.bg-bubblegum { --tint: var(--color-bubblegum); }
+[data-theme="dark"] .tint.bg-sky { --tint: var(--color-sky); }
+[data-theme="dark"] .tint.bg-mint { --tint: var(--color-mint); }
+/* The final CTA: the page's closing glow moment. */
+[data-theme="dark"] .tint.bg-brand-600 {
+  background-image:
+    radial-gradient(60% 90% at 50% 0%, rgb(155 71 204 / 0.38), transparent 70%),
+    radial-gradient(55% 70% at 50% 115%, rgb(198 244 50 / 0.2), transparent 70%);
+  border-color: rgb(196 122 227 / 0.35);
+  box-shadow: inset 0 1px 0 rgb(196 122 227 / 0.3), 0 30px 120px -40px rgb(155 71 204 / 0.55);
+}
+[data-theme="dark"] .bg-white\/70 { background-color: rgb(255 255 255 / 0.12); } /* sticky-note tape */
+
+/* Buttons glow instead of casting hard shadows. */
+[data-theme="dark"] .group\/btn.bg-lime { box-shadow: 0 0 0 1px rgb(198 244 50 / 0.35), 0 10px 32px -8px rgb(198 244 50 / 0.5); }
+[data-theme="dark"] .group\/btn.bg-brand-600 { box-shadow: 0 0 0 1px rgb(196 122 227 / 0.35), 0 10px 32px -8px rgb(155 71 204 / 0.6); }
+[data-theme="dark"] .group\/btn.bg-lime:hover { box-shadow: 0 0 0 1px rgb(198 244 50 / 0.5), 0 14px 44px -6px rgb(198 244 50 / 0.65); }
+[data-theme="dark"] .group\/btn.bg-brand-600:hover { box-shadow: 0 0 0 1px rgb(196 122 227 / 0.5), 0 14px 44px -6px rgb(155 71 204 / 0.75); }
+
+/* Highlighted words: coloured text with a soft glow instead of a bright swipe. */
+[data-theme="dark"] .marker {
+  background-image: none;
+  color: var(--marker) !important;
+  text-shadow: 0 0 28px color-mix(in oklab, var(--marker) 45%, transparent);
+}
+/* Maps and scans are imagery: dim them. */
+[data-theme="dark"] .map-dim { filter: brightness(0.62) saturate(0.85); }
+
+/* Smooth theme switch; ThemeToggle adds .theme-anim for 350ms. */
+.theme-anim, .theme-anim * {
+  transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease, fill 300ms ease !important;
+}
+
+/* Maps-app palette for the hero phone (light = day map, dark = night map). */
+.maps {
+  --m-land: #eef0f1; --m-block: #e4e6e9; --m-park: #ceead6; --m-water: #aecbfa; --m-road: #ffffff; --m-casing: #dadce0;
+  --m-art: #fde293; --m-artc: #f2c14e; --m-label: #80868b; --m-park-label: #137333;
+  --m-text: #202124; --m-sub: #70757a; --m-line: #e6e6e6; --m-open: #188038; --m-status: #111111;
+  --m-you: #f6ecfd; --m-thumb: linear-gradient(135deg, #e8eaed, #d2d6db);
+}
+[data-theme="dark"] .maps {
+  --m-land: #1d2330; --m-block: #252c3a; --m-park: #1c3631; --m-water: #10263d; --m-road: #3a4252; --m-casing: #2a303c;
+  --m-art: #6e5d2c; --m-artc: #4d4121; --m-label: #9aa0a6; --m-park-label: #7fc79a;
+  --m-text: #e8eaed; --m-sub: #9aa0a6; --m-line: #34363b; --m-open: #81c995; --m-status: #f1f1f1;
+  --m-you: #33263f; --m-thumb: linear-gradient(135deg, #2c2f35, #363a41);
+}
+
+@layer base {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @media (pointer: fine) {
+    html { overscroll-behavior: none; }
+  }
+  a, button, summary {
+    touch-action: manipulation;
+  }
+  p, li {
+    text-wrap: pretty;
+  }
+  body {
+    @apply bg-paper text-ink antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    @apply font-extrabold;
+    text-wrap: balance;
+  }
+  ::selection {
+    @apply bg-lime text-ink;
+  }
+  :focus-visible {
+    @apply outline-3 outline-offset-2 outline-brand-600;
+  }
+}
+
+@utility tracking-display {
+  letter-spacing: -0.035em;
+}
+
+@utility bg-dots {
+  background-image: radial-gradient(color-mix(in srgb, var(--color-ink) 13%, transparent) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+/* Highlighter swipe behind a word; sweeps in when its Reveal fires. */
+@utility marker {
+  background-image: linear-gradient(transparent var(--marker-from, 58%), var(--marker, var(--color-sun)) var(--marker-from, 58%), var(--marker, var(--color-sun)) 92%, transparent 92%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding-inline: 0.08em;
+  /* On dark grounds the swipe must cover the whole word, or ink text vanishes. */
+  &.marker-full { --marker-from: 4%; border-radius: 0.15em; box-decoration-break: clone; }
+  transition: background-size 800ms var(--ease-in-out) 250ms;
+}
+
+@utility hover-wiggle {
+  &:hover { animation: wiggle 400ms ease-in-out; }
+}
+
+/* WCAG 2.2.2: the motion toggle freezes every looping animation. */
+[data-motion="paused"] * {
+  animation-play-state: paused !important;
+}
+
+@layer components {
+  [data-reveal] {
+    transition:
+      opacity 600ms var(--ease-out),
+      transform 600ms var(--ease-out);
+  }
+  [data-reveal][data-pending]:not([data-stagger]) {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  [data-pending] .marker {
+    background-size: 0% 100%;
+  }
+  [data-item] {
+    transition:
+      opacity 500ms var(--ease-out),
+      transform 650ms var(--ease-spring);
+    transition-delay: calc((var(--i, 0) + var(--o, 0)) * 70ms);
+  }
+  [data-draw] {
+    transition: stroke-dashoffset 1200ms var(--ease-in-out) 300ms;
+  }
+  [data-pending] [data-draw] {
+    stroke-dashoffset: 1;
+  }
+  [data-pending] [data-item] {
+    opacity: 0;
+    transform: translateY(24px) rotate(-4deg) scale(0.94);
+  }
+  [data-pending] [data-item][data-pop] {
+    transform: scale(0.6) rotate(-8deg);
+  }
+
+  details::details-content {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition:
+      height 250ms var(--ease-out),
+      opacity 250ms var(--ease-out),
+      content-visibility 250ms allow-discrete;
+  }
+  details[open]::details-content {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+/* Reduced motion: keep the fades, drop movement and loops. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-reveal][data-pending]:not([data-stagger]),
+  [data-pending] [data-item] {
+    transform: none !important;
+  }
+  .animate-rise { animation-name: fade-only; }
+  .animate-marquee, .animate-ping-once, .animate-pulse, .animate-pop, .animate-bob, .animate-spin-slow, .animate-words, .hover-wiggle:hover {
+    animation: none;
+  }
+  .animate-draw { animation: none; stroke-dashoffset: 0; }
+}
+@keyframes fade-only {
+  from { opacity: 0; }
+}
