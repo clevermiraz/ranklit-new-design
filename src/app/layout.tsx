@@ -27,9 +27,10 @@ export const viewport: Viewport = {
   themeColor: "#fff8ec",
 };
 
-// Light is the default for everyone. Dark only if the visitor picked it with the toggle (saved in localStorage).
-// Runs before paint so a visitor who chose dark never sees a light flash.
-const themeScript = `try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}`;
+// Every visit starts light. Dark lasts only for the current tab session (sessionStorage), so a reload keeps it
+// but a new visit is light again. Runs before paint so there's no flash on reload.
+// Revert to "remember forever": swap sessionStorage back to localStorage here and in theme-toggle.tsx.
+const themeScript = `try{localStorage.removeItem("theme");document.documentElement.dataset.theme=sessionStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

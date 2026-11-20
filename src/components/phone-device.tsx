@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import clsx from "clsx";
-import { ArrowLeft, Clock, Star } from "lucide-react";
+import { ArrowLeft, Check, Clock, MapPin, Star } from "lucide-react";
 import { useClimb } from "@/components/phone-sim";
 
 const ROW = 70; // result row height (px)
@@ -18,6 +18,21 @@ const PINS: [number, number][] = [
   [40, 268],
 ];
 const YOU_PIN: [number, number] = [184, 214];
+
+/**
+ * Hover on the hero phone.
+ * "burst" (v2): the phone keeps its tilt; the cards around it spread out and mini-stickers pop from behind it.
+ * "straighten" (v1 backup): the phone just rotates flat. Revert by setting this to "straighten".
+ */
+const PHONE_HOVER: "burst" | "straighten" = "burst";
+
+// Mini-stickers hidden behind the phone. `from` tucks them back toward the phone until hover.
+const BURST = [
+  { at: "top-[10%] left-full ml-4", tilt: "rotate-6", from: "-translate-x-full", bg: "bg-sun", icon: Star, label: "New 5★ review", delay: "group-hover/phone:delay-0" },
+  { at: "top-[33%] left-full ml-8", tilt: "-rotate-3", from: "-translate-x-full", bg: "bg-mint", icon: Check, label: "Post is live", delay: "group-hover/phone:delay-75" },
+  { at: "top-[56%] left-full ml-3", tilt: "rotate-3", from: "-translate-x-full", bg: "bg-sky", icon: Clock, label: "Hours fixed", delay: "group-hover/phone:delay-150" },
+  { at: "bottom-[20%] right-full mr-5", tilt: "-rotate-6", from: "translate-x-full", bg: "bg-lime", icon: MapPin, label: "Top 3 nearby", delay: "group-hover/phone:delay-200" },
+] as const;
 
 /**
  * Hero: a realistic iPhone running a maps-style search. "Your business" starts buried below the
@@ -36,9 +51,27 @@ export function PhoneDevice() {
         reviews and fixes your profile, your business moves up the results until it is first.
       </p>
 
-      <div aria-hidden className="relative">
-        {/* Titanium frame */}
-        <div className="relative rotate-2 rounded-[54px] bg-[linear-gradient(145deg,#4a4a51,#1d1d21_38%,#33333a_62%,#141417)] p-[11px] shadow-[0_0_0_1px_#6b6b73_inset,0_44px_80px_-32px_rgb(0_0_0/0.6),0_18px_36px_-18px_rgb(0_0_0/0.45)] transition-transform duration-500 ease-[var(--ease-spring)] hover:rotate-0">
+      <div aria-hidden className="group/phone relative">
+        {PHONE_HOVER === "burst" &&
+          BURST.map((b) => (
+            <div
+              key={b.label}
+              className={clsx(
+                "pointer-events-none absolute hidden scale-50 lg:flex items-center gap-1.5 rounded-xl border-2 border-ink px-2.5 py-1.5 text-xs font-extrabold whitespace-nowrap opacity-0 shadow-pop-sm transition-[translate,scale,opacity] duration-500 ease-[var(--ease-spring)] group-hover/phone:translate-x-0 group-hover/phone:translate-y-0 group-hover/phone:scale-100 group-hover/phone:opacity-100 motion-reduce:transition-none",
+                b.at,
+                b.tilt,
+                b.from,
+                b.bg,
+                b.delay,
+              )}
+            >
+              <b.icon className="size-3.5" strokeWidth={2.75} />
+              {b.label}
+            </div>
+          ))}
+
+        {/* Titanium frame. Stands straight; add rotate-2 here to bring back the old tilt. */}
+        <div className={"relative rounded-[54px] bg-[linear-gradient(145deg,#4a4a51,#1d1d21_38%,#33333a_62%,#141417)] p-[11px] shadow-[0_0_0_1px_#6b6b73_inset,0_44px_80px_-32px_rgb(0_0_0/0.6),0_18px_36px_-18px_rgb(0_0_0/0.45)] transition-transform duration-500 ease-[var(--ease-spring)]" + (PHONE_HOVER === "straighten" ? " hover:rotate-0" : "")}>
           {/* side buttons */}
           <span className="absolute top-[118px] -left-[3px] h-7 w-[4px] rounded-l-sm bg-[#2c2c31]" />
           <span className="absolute top-[166px] -left-[3px] h-12 w-[4px] rounded-l-sm bg-[#2c2c31]" />
@@ -142,7 +175,7 @@ export function PhoneDevice() {
 
         {/* What Ranklit just did */}
         <div key={`did-${run}-${step}`} className="animate-pop absolute -top-8 -left-4 z-30 max-w-[230px] sm:-left-24">
-          <div className="flex items-center gap-2 rounded-2xl border-2 border-ink bg-white px-3 py-2 text-[13px] font-bold shadow-pop">
+          <div className="flex items-center gap-2 rounded-2xl border-2 border-ink bg-white px-3 py-2 text-[13px] font-bold shadow-pop transition-[translate,rotate] duration-500 ease-[var(--ease-spring)] group-hover/phone:-translate-x-3 group-hover/phone:-translate-y-3 group-hover/phone:-rotate-3">
             <span className="grid size-7 shrink-0 place-items-center rounded-lg border-2 border-ink bg-sun">
               <s.icon className="size-3.5" strokeWidth={2.5} />
             </span>
@@ -151,7 +184,7 @@ export function PhoneDevice() {
         </div>
 
         {/* Your rank */}
-        <div className="absolute top-[25%] -left-1 z-30 -rotate-6 rounded-2xl border-2 border-ink bg-bubblegum px-3 py-2 text-center shadow-pop sm:-left-32">
+        <div className="absolute top-[25%] -left-1 z-30 -rotate-6 rounded-2xl border-2 border-ink bg-bubblegum px-3 py-2 text-center shadow-pop transition-[translate,rotate] duration-500 ease-[var(--ease-spring)] group-hover/phone:-translate-x-4 group-hover/phone:-rotate-12 sm:-left-32">
           <p className="text-[11px] font-extrabold tracking-wide uppercase">Your rank</p>
           <p key={s.pos} className="animate-pop font-display text-4xl leading-none font-extrabold tabular-nums">#{s.pos + 1}</p>
         </div>

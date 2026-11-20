@@ -93,7 +93,7 @@ Section rhythm: `py-24 sm:py-32`. Alternate `paper` and `paper-2` (with `border-
 
 ## 6. Dark mode (v3, "lime night glow")
 
-**Light is the default for everyone.** Dark is opt-in through the header toggle, and the choice is saved in `localStorage.theme`. `layout.tsx` sets `html[data-theme]` before paint, so there's no flash.
+**Light is the default for everyone.** Dark is opt-in through the header toggle, and the choice lasts only for the tab session (`sessionStorage.theme`), so every new visit starts light. `layout.tsx` sets `html[data-theme]` before paint, so there's no flash. The switch is one GPU crossfade (View Transitions API, `FADE` in `theme-toggle.tsx`); never animate colours per element, it janks on a long page.
 
 Inspired by Lime Duo and H2 on darkmodedesign.com, within the dark-mode-design skill's rules. Most of it is automatic through tokens:
 - **Neutral black** `#0a0a0b` (not tinted), with a faint 48px grid (`bg-dots` turns into a grid in dark).

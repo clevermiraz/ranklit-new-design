@@ -183,7 +183,14 @@
 /* Maps and scans are imagery: dim them. */
 [data-theme="dark"] .map-dim { filter: brightness(0.62) saturate(0.85); }
 
-/* Smooth theme switch; ThemeToggle adds .theme-anim for 350ms. */
+/* Theme switch v2: one GPU crossfade of the whole page (ThemeToggle uses document.startViewTransition). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--ease-out);
+}
+
+/* Theme switch v1 backup (FADE = "css" in theme-toggle.tsx): adds .theme-anim for 350ms. */
 .theme-anim, .theme-anim * {
   transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease, fill 300ms ease !important;
 }
@@ -228,8 +235,16 @@
     @apply font-extrabold;
     text-wrap: balance;
   }
+  /* Fixed hexes, not tokens: --color-ink flips to off-white in dark, which made lime selections unreadable. */
   ::selection {
-    @apply bg-lime text-ink;
+    background-color: #c6f432;
+    color: #1a1523;
+    text-shadow: none;
+  }
+  /* Inside lime chips/buttons a lime selection would vanish: use purple instead. */
+  .bg-lime::selection, .bg-lime *::selection, .marker::selection {
+    background-color: #9b47cc;
+    color: #ffffff;
   }
   :focus-visible {
     @apply outline-3 outline-offset-2 outline-brand-600;
