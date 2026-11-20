@@ -1,32 +1,12 @@
-// v2 "clean SaaS" landing page. Backup of the previous design: src/app/v1/page.tsx (live at /v1, not indexed).
+// v3 landing page: v2 after an unslop pass (no colour washes, glows, decorative icons, pill badges or scroll motion).
+// Backups: src/app/v2/page.tsx (/v2) and src/app/v1/page.tsx (/v1, sticker map). Neither is indexed.
 // Trust proof (testimonials, stats, guarantee, founder, company) comes from src/content/proof.ts and stays hidden until filled.
 import Image from "next/image";
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 import clsx from "clsx";
-import {
-  ArrowRight,
-  BellRing,
-  Check,
-  CircleCheck,
-  ClipboardCheck,
-  Clock,
-  Eye,
-  KeyRound,
-  LogOut,
-  Mail,
-  MapPin,
-  MessageSquareReply,
-  Newspaper,
-  QrCode,
-  Search,
-  ShieldCheck,
-  Star,
-  ThumbsUp,
-  Wallet,
-} from "lucide-react";
+import { ArrowRight, BellRing, Check, Clock, Mail, Newspaper, ShieldCheck, Star } from "lucide-react";
 import { Container } from "@/components/ui";
-import { Reveal } from "@/components/reveal";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { gridStats, rankTone, type RankValue } from "@/components/rank-grid";
@@ -67,19 +47,19 @@ const FEED = [
 ];
 
 const FEATURES = [
-  { icon: Newspaper, title: "Google posts, 3× a week", text: "Updates written for your business. Approve each one first, or let them publish on their own." },
-  { icon: MessageSquareReply, title: "Replies to good reviews", text: "Warm, personal replies to 4–5★ reviews, if you turn it on. 1–3★ reviews stay with you." },
-  { icon: ClipboardCheck, title: "Monthly profile checkup", text: "Hours, photos, services and categories are checked, and fixed where they can be." },
-  { icon: QrCode, title: "Review page and QR code", text: "Your own review link and a printable QR code for the counter, the van or the receipt." },
-  { icon: MapPin, title: "Weekly map scan", text: "Your position from 49 spots around you, for every search you track." },
-  { icon: Mail, title: "A plain-English report", text: "A short email every Monday and a monthly report: where you moved and what was done." },
+  { title: "Google posts, 3× a week", text: "Updates written for your business. Approve each one first, or let them publish on their own." },
+  { title: "Replies to good reviews", text: "Warm, personal replies to 4–5★ reviews, if you turn it on. 1–3★ reviews stay with you." },
+  { title: "Monthly profile checkup", text: "Hours, photos, services and categories are checked, and fixed where they can be." },
+  { title: "Review page and QR code", text: "Your own review link and a printable QR code for the counter, the van or the receipt." },
+  { title: "Weekly map scan", text: "Your position from 49 spots around you, for every search you track." },
+  { title: "A plain-English report", text: "A short email every Monday and a monthly report: where you moved and what was done." },
 ];
 
 const CONTROL = [
-  { icon: KeyRound, title: "You sign in with Google", text: "You connect through Google’s own sign-in screen. We never see your Google password." },
-  { icon: Eye, title: "Approve before it posts", text: "Turn on approvals and nothing goes live on your profile until you say so." },
-  { icon: ThumbsUp, title: "Hard reviews stay human", text: "Automatic replies are opt-in and only for 4–5★ reviews. Anything lower is yours to answer." },
-  { icon: LogOut, title: "Leave any time", text: "No contract. Cancel in one click, and remove Ranklit’s access from your Google account whenever you like." },
+  { title: "You sign in with Google", text: "You connect through Google’s own sign-in screen. We never see your Google password." },
+  { title: "Approve before it posts", text: "Turn on approvals and nothing goes live on your profile until you say so." },
+  { title: "Hard reviews stay human", text: "Automatic replies are opt-in and only for 4–5★ reviews. Anything lower is yours to answer." },
+  { title: "Leave any time", text: "No contract. Cancel in one click, and remove Ranklit’s access from your Google account whenever you like." },
 ];
 
 const PLANS = [
@@ -197,7 +177,7 @@ function Button({
         variant === "primary"
           ? "bg-accent text-white shadow-[0_1px_2px_rgb(16_24_40/0.12)] hover:bg-accent-hover"
           : "border border-line-strong bg-surface text-fg hover:bg-subtle",
-        size === "lg" ? "min-h-12 px-5 text-[15px]" : "min-h-10 px-4 text-sm",
+        size === "lg" ? "min-h-12 px-5 text-[15px]" : "min-h-11 px-4 text-sm sm:min-h-10",
         className,
       )}
       {...props}
@@ -211,32 +191,20 @@ function Button({
 function SectionHeading({ eyebrow, title, intro, center }: { eyebrow: string; title: ReactNode; intro?: string; center?: boolean }) {
   return (
     <div className={clsx("max-w-2xl", center && "mx-auto text-center")}>
-      <p className="text-sm font-semibold text-accent-text">{eyebrow}</p>
+      <p className="text-sm font-medium text-muted">{eyebrow}</p>
       <h2 className="mt-3 text-3xl leading-tight text-fg sm:text-4xl">{title}</h2>
       {intro && <p className="mt-4 text-lg leading-relaxed text-muted">{intro}</p>}
     </div>
   );
 }
 
-function IconBox({ children }: { children: ReactNode }) {
-  return <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-soft text-accent-text [&>svg]:size-5">{children}</span>;
-}
-
+/** The terms, as one quiet line under the trial buttons. The guarantee joins it once it is real (src/content/proof.ts). */
 function TrustLine({ className }: { className?: string }) {
-  const items = ["3-day free trial", "No contract", "Cancel any time"];
   return (
-    <ul className={clsx("flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted", className)}>
-      {items.map((t) => (
-        <li key={t} className="flex items-center gap-1.5">
-          <CircleCheck className="size-4 text-rank-good" aria-hidden /> {t}
-        </li>
-      ))}
-      {guarantee && (
-        <li className="flex items-center gap-1.5 font-medium text-fg">
-          <ShieldCheck className="size-4 text-rank-good" aria-hidden /> {guarantee.title}
-        </li>
-      )}
-    </ul>
+    <p className={clsx("text-sm text-muted", className)}>
+      From $99 a month per location · 3-day free trial · No contract · Cancel any time
+      {guarantee && <span className="font-medium text-fg"> · {guarantee.title}</span>}
+    </p>
   );
 }
 
@@ -255,7 +223,7 @@ function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-1 sm:gap-2">
-          <ThemeToggle className="grid size-10 shrink-0 place-items-center rounded-lg text-muted transition-colors duration-150 hover:bg-subtle hover:text-fg" />
+          <ThemeToggle className="grid size-11 shrink-0 sm:size-10 place-items-center rounded-lg text-muted transition-colors duration-150 hover:bg-subtle hover:text-fg" />
           <Link href="/login" className="hidden min-h-10 items-center rounded-md px-3 text-sm font-medium text-muted transition-colors duration-150 hover:text-fg sm:inline-flex">
             Log in
           </Link>
@@ -269,15 +237,11 @@ function Header() {
 function Hero() {
   return (
     <section className="relative overflow-hidden">
-      {/* One soft wash of brand colour behind the product; nothing else decorative. */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[560px] bg-[radial-gradient(60%_60%_at_75%_10%,var(--color-accent-soft),transparent_70%)]" />
       <Container className="relative grid grid-cols-1 items-center gap-14 pt-16 pb-16 sm:pt-24 lg:grid-cols-[1fr_1.05fr] lg:gap-12 lg:pb-24">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-sm font-medium text-muted">
-            <MapPin className="size-4 text-accent-text" aria-hidden /> Local SEO for Google Business Profiles
-          </p>
-          <h1 className="mt-6 text-[40px] leading-[1.08] text-fg sm:text-5xl lg:text-[56px]">
-            Your Google profile, handled every week.
+          <p className="text-sm font-medium text-muted">Local SEO for Google Business Profiles</p>
+          <h1 className="mt-4 text-[40px] leading-[1.08] text-fg sm:text-5xl lg:text-[56px]">
+            Your Google profile, handled every week
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
             Ranklit posts updates, replies to your good reviews and fixes what is missing on your Google Business Profile. Then
@@ -292,7 +256,6 @@ function Hero() {
             </Button>
           </div>
           <TrustLine className="mt-6" />
-          <p className="mt-3 text-sm text-muted">From $99 a month per location.</p>
         </div>
         <Dashboard />
       </Container>
@@ -385,25 +348,22 @@ function Industries() {
 
 function Problem() {
   const items = [
-    { icon: Wallet, title: "Agencies cost a lot", text: "Local SEO agencies often charge $1,500 or more a month, and send a report once a month that is hard to check." },
-    { icon: Clock, title: "Doing it yourself never gets done", text: "Posting every week, answering every review, keeping hours and photos right. It is the first thing to slip." },
-    { icon: Search, title: "You can’t see your real rank", text: "Search from your own phone and you see one spot. Customers across town see something else." },
+    { title: "Agencies cost a lot", text: "Local SEO agencies often charge $1,500 or more a month, and send a report once a month that is hard to check." },
+    { title: "Doing it yourself never gets done", text: "Posting every week, answering every review, keeping hours and photos right. It is the first thing to slip." },
+    { title: "You can’t see your real rank", text: "Search from your own phone and you see one spot. Customers across town see something else." },
   ];
   return (
     <section className="py-20 sm:py-28">
       <Container>
         <SectionHeading eyebrow="The problem" title="Local SEO is simple work. It just never stops." />
-        <Reveal className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-8 md:grid-cols-3">
           {items.map((it) => (
-            <div key={it.title} className="rounded-2xl border border-line bg-surface p-6">
-              <IconBox>
-                <it.icon />
-              </IconBox>
-              <h3 className="mt-5 text-lg text-fg">{it.title}</h3>
+            <div key={it.title} className="border-t border-line pt-6">
+              <h3 className="text-lg text-fg">{it.title}</h3>
               <p className="mt-2 leading-relaxed text-muted">{it.text}</p>
             </div>
           ))}
-        </Reveal>
+        </div>
       </Container>
     </section>
   );
@@ -418,17 +378,14 @@ function Features() {
           title="The weekly work Google rewards, done for you"
           intro="Each task runs on a schedule, and every action is logged so you can see it."
         />
-        <Reveal className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <dl className="mt-12 grid gap-x-12 border-t border-line sm:grid-cols-2">
           {FEATURES.map((f) => (
-            <div key={f.title} className="rounded-2xl border border-line bg-surface p-6">
-              <IconBox>
-                <f.icon />
-              </IconBox>
-              <h3 className="mt-5 text-lg text-fg">{f.title}</h3>
-              <p className="mt-2 leading-relaxed text-muted">{f.text}</p>
+            <div key={f.title} className="border-b border-line py-6">
+              <dt className="text-lg font-semibold text-fg">{f.title}</dt>
+              <dd className="mt-2 leading-relaxed text-muted">{f.text}</dd>
             </div>
           ))}
-        </Reveal>
+        </dl>
       </Container>
     </section>
   );
@@ -443,7 +400,7 @@ function MapCheck() {
   return (
     <section id="map-check" className="scroll-mt-20 py-20 sm:py-28">
       <Container className="grid grid-cols-1 items-center gap-14 lg:grid-cols-[1fr_1fr]">
-        <Reveal>
+        <div>
           <SectionHeading
             eyebrow="The weekly map scan"
             title="Your rank from 49 spots, not one"
@@ -465,7 +422,7 @@ function MapCheck() {
             <li className="flex items-center gap-2"><span className="size-2.5 rounded-full bg-rank-mid" /> 4 to 10</li>
             <li className="flex items-center gap-2"><span className="size-2.5 rounded-full bg-rank-bad" /> 11 or lower</li>
           </ul>
-        </Reveal>
+        </div>
         <div className="mx-auto w-full max-w-[480px] lg:mr-0">
           <RankMap before={FIRST_SCAN} after={LATEST_SCAN} keyword="plumber near me" />
           <p className="mt-3 text-center text-xs text-muted">Switch weeks to compare. Sample data, not a customer.</p>
@@ -479,7 +436,7 @@ function Control() {
   return (
     <section className="border-y border-line bg-subtle py-20 sm:py-28">
       <Container className="grid grid-cols-1 items-start gap-14 lg:grid-cols-2">
-        <Reveal>
+        <div>
           <SectionHeading
             eyebrow="Transparency and control"
             title="Nothing happens behind your back"
@@ -487,16 +444,13 @@ function Control() {
           />
           <ul className="mt-10 grid gap-6 sm:grid-cols-2">
             {CONTROL.map((c) => (
-              <li key={c.title}>
-                <IconBox>
-                  <c.icon />
-                </IconBox>
-                <p className="mt-4 font-semibold text-fg">{c.title}</p>
+              <li key={c.title} className="border-t border-line pt-4">
+                <p className="font-semibold text-fg">{c.title}</p>
                 <p className="mt-1 text-[15px] leading-relaxed text-muted">{c.text}</p>
               </li>
             ))}
           </ul>
-        </Reveal>
+        </div>
         <figure className="rounded-2xl border border-line bg-surface shadow-[0_1px_2px_rgb(16_24_40/0.04),0_12px_32px_-12px_rgb(16_24_40/0.12)] lg:mt-10">
           <div className="flex items-center justify-between border-b border-line px-5 py-4">
             <p className="font-semibold text-fg">Activity this week</p>
@@ -535,7 +489,7 @@ function Testimonials() {
           {testimonials.map((t) => (
             <figure key={t.name + t.business} className="flex flex-col rounded-2xl border border-line bg-surface p-6">
               <blockquote className="flex-1 leading-relaxed text-fg">“{t.quote}”</blockquote>
-              {t.result && <p className="mt-4 rounded-lg bg-accent-soft px-3 py-2 text-sm font-medium text-accent-text">{t.result}</p>}
+              {t.result && <p className="mt-4 text-sm font-medium text-fg">{t.result}</p>}
               <figcaption className="mt-6 flex items-center gap-3">
                 <Avatar name={t.name} photo={t.photo} />
                 <span>
@@ -577,16 +531,16 @@ function HowItWorks() {
     <section id="how" className="scroll-mt-20 py-20 sm:py-28">
       <Container>
         <SectionHeading center eyebrow="How it works" title="Five minutes to set up. Then it runs." />
-        <Reveal as="ol" className="relative mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
+        <ol className="relative mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
           <span aria-hidden className="absolute top-5 right-[16.6%] left-[16.6%] hidden h-px bg-line-strong md:block" />
           {steps.map((s, n) => (
             <li key={s.title} className="relative text-center">
-              <span className="relative mx-auto grid size-10 place-items-center rounded-full bg-accent text-sm font-semibold text-white ring-8 ring-canvas">{n + 1}</span>
+              <span className="relative mx-auto grid size-10 place-items-center rounded-full border border-line-strong bg-canvas text-sm font-semibold text-fg ring-8 ring-canvas">{n + 1}</span>
               <h3 className="mt-5 text-lg text-fg">{s.title}</h3>
               <p className="mx-auto mt-2 max-w-[280px] leading-relaxed text-muted">{s.text}</p>
             </li>
           ))}
-        </Reveal>
+        </ol>
       </Container>
     </section>
   );
@@ -603,13 +557,13 @@ function Pricing() {
               key={p.id}
               className={clsx(
                 "relative flex flex-col rounded-2xl border bg-surface p-7 sm:p-8",
-                p.recommended ? "border-accent shadow-[0_0_0_1px_var(--color-accent),0_24px_48px_-20px_rgb(141_62_187/0.35)]" : "border-line",
+                p.recommended ? "border-accent" : "border-line",
               )}
             >
-              {p.recommended && (
-                <span className="absolute -top-3 left-7 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">Recommended</span>
-              )}
-              <h3 className="text-xl text-fg">{p.name}</h3>
+              <div className="flex items-baseline justify-between gap-4">
+                <h3 className="text-xl text-fg">{p.name}</h3>
+                {p.recommended && <span className="text-sm font-medium text-accent-text">Recommended</span>}
+              </div>
               <p className="mt-1 text-muted">{p.blurb}</p>
               <p className="mt-6 flex items-baseline gap-1.5">
                 <span className="text-5xl font-semibold tracking-tight text-fg tabular-nums">${p.price}</span>
@@ -618,7 +572,7 @@ function Pricing() {
               <ul className="mt-7 mb-8 space-y-3 text-[15px]">
                 {p.features.map((f) => (
                   <li key={f} className="flex gap-3 text-fg">
-                    <Check className="mt-0.5 size-5 shrink-0 text-accent-text" aria-hidden />
+                    <Check className="mt-0.5 size-4 shrink-0 text-muted" aria-hidden />
                     {f}
                   </li>
                 ))}
@@ -638,7 +592,6 @@ function Pricing() {
             </div>
           </div>
         )}
-        <TrustLine className="mt-8 justify-center" />
       </Container>
     </section>
   );
@@ -652,7 +605,7 @@ function Founder() {
         <div className="flex flex-col gap-8 rounded-2xl border border-line bg-surface p-8 sm:flex-row sm:items-start">
           <Avatar name={founder.name} photo={founder.photo} size={96} />
           <div>
-            <p className="text-sm font-semibold text-accent-text">Who is behind Ranklit</p>
+            <p className="text-sm font-medium text-muted">Who is behind Ranklit</p>
             <p className="mt-3 text-lg leading-relaxed text-fg">{founder.bio}</p>
             <p className="mt-5 font-semibold text-fg">{founder.name}</p>
             <p className="text-sm text-muted">
@@ -706,7 +659,7 @@ function FinalCta() {
   return (
     <section className="px-5 pb-20 sm:px-6 sm:pb-28">
       <div className="mx-auto max-w-6xl rounded-2xl border border-line bg-subtle px-6 py-16 text-center sm:px-12 sm:py-20">
-        <h2 className="mx-auto max-w-2xl text-3xl leading-tight text-fg sm:text-4xl">See where you rank this week.</h2>
+        <h2 className="mx-auto max-w-2xl text-3xl leading-tight text-fg sm:text-4xl">See where you rank this week</h2>
         <p className="mx-auto mt-4 max-w-xl text-lg text-muted">Connect Google and your first map scan runs the same day.</p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Button href={trialHref()} size="lg" arrow>
@@ -729,7 +682,7 @@ function Footer() {
         <div className="grid gap-10 sm:grid-cols-[1.5fr_1fr_1fr]">
           <div>
             <Logo />
-            <p className="mt-3 max-w-xs leading-relaxed">Weekly local SEO for Google Business Profiles.</p>
+            <p className="mt-3 max-w-xs leading-relaxed">Weekly local SEO for Google Business Profiles</p>
             {company && (
               <address className="mt-4 leading-relaxed not-italic">
                 {company.legalName}
@@ -745,16 +698,16 @@ function Footer() {
           <nav aria-label="Product" className="flex flex-col gap-1">
             <p className="mb-1 font-semibold text-fg">Product</p>
             {NAV.map(([label, href]) => (
-              <a key={href} href={href} className="inline-flex min-h-9 items-center hover:text-fg">
+              <a key={href} href={href} className="inline-flex min-h-11 items-center hover:text-fg sm:min-h-9">
                 {label}
               </a>
             ))}
           </nav>
           <nav aria-label="Company" className="flex flex-col gap-1">
             <p className="mb-1 font-semibold text-fg">Company</p>
-            <Link href="/privacy" className="inline-flex min-h-9 items-center hover:text-fg">Privacy</Link>
-            <Link href="/terms" className="inline-flex min-h-9 items-center hover:text-fg">Terms</Link>
-            <a href={`mailto:${site.email}`} className="inline-flex min-h-9 items-center hover:text-fg">{site.email}</a>
+            <Link href="/privacy" className="inline-flex min-h-11 items-center hover:text-fg sm:min-h-9">Privacy</Link>
+            <Link href="/terms" className="inline-flex min-h-11 items-center hover:text-fg sm:min-h-9">Terms</Link>
+            <a href={`mailto:${site.email}`} className="inline-flex min-h-11 items-center hover:text-fg sm:min-h-9">{site.email}</a>
           </nav>
         </div>
         <p className="mt-10 border-t border-line pt-6 text-xs leading-relaxed">

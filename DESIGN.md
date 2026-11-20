@@ -171,9 +171,20 @@ Reuse the landing page's `Header` and `Footer` (move them into `src/components/`
 - [ ] `npx tsc --noEmit`, `npm run lint` and `npm run build` all pass.
 - [ ] The previous version of anything redesigned is kept as a switchable backup (the team rule).
 
-## v2 landing page ("clean SaaS", current)
+## Current landing page: v2 + unslop pass
 
-The home page (`src/app/page.tsx`) is v2: white/neutral surfaces, one accent (purple), 1px hairlines, soft shadows, no tilts, stickers, tickers or looping motion. Its look is scoped under `.v2`, so v1 keeps working at `/v1` (backup, not indexed).
+The home page (`src/app/page.tsx`) is v2 after an unslop pass ([heydamir/unslop](https://github.com/heydamir/unslop), CC BY 4.0). The pre-pass v2 is kept at `/v2` (`src/app/v2/page.tsx`, not indexed). It is v2: white/neutral surfaces, one accent (purple), 1px hairlines, soft shadows, no tilts, stickers, tickers or looping motion. Its look is scoped under `.v2`, so v1 keeps working at `/v1` (backup, not indexed).
 - Tokens: `canvas`, `subtle`, `surface`, `line`, `line-strong`, `fg`, `muted`, `accent`, `accent-hover`, `accent-soft`, `accent-text` (light and dark values in `globals.css`). Use these in v2, never the v1 sticker classes (`border-ink`, `shadow-pop`, `bg-lime` …).
 - Trust proof (testimonials, stats, guarantee, founder, company) lives in `src/content/proof.ts`. Each section is hidden until its data is filled. Only real data goes there.
 - Every sample (dashboard, rank map, activity) is labelled as a sample.
+
+### Unslop rules (apply to every new v2-style page)
+- **Direction:** plain-spoken, map-literate, accountable. The hero dashboard and the 49-spot map are the only "moments"; everything else is quiet text. The signature is the green/amber/red rank dot, the only colour besides the purple action.
+- **Colour:** neutral surfaces. Accent (purple) only on primary buttons and the recommended plan's edge. Eyebrows and labels are `text-muted`. No colour washes, radial gradients, glows, coloured shadows or gradient text.
+- **No decoration:** no pill badges above headlines, no icon-in-a-tinted-box on cards, no emoji. Icons only where they carry meaning (e.g. the activity-log column), lucide, one size, text colour.
+- **Layout:** avoid rows of identical cards. Use plain columns with a top hairline, or a two-column spec list (`dl` with hairlines). Hero stays an asymmetric split with the real product view.
+- **Copy:** say what it does for whom, no hype, no exclamation marks, no trailing periods on short labels and headings. Terms go in **one quiet line** under trial buttons (hero and final CTA), not checkmark chips.
+- **Type:** headings weight 600 at most, with negative tracking only on h1/h2. Sentence case, no uppercase tracked labels, `tabular-nums` for numbers.
+- **Motion:** no scroll reveals, loops, springs or hover scale. Colour transitions and tiny transforms (the button arrow, the FAQ plus) only.
+- **Touch:** 44px targets on phones (`min-h-11 … sm:min-h-9/10`).
+

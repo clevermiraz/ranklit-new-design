@@ -378,8 +378,11 @@
 @layer base {
   .v2 :is(h1, h2, h3, h4) {
     font-family: var(--font-sans);
-    font-weight: 650;
-    letter-spacing: -0.025em;
+    font-weight: 600;
+  }
+  /* Tight tracking only where type is big; small headings keep normal spacing. */
+  .v2 :is(h1, h2) {
+    letter-spacing: -0.02em;
   }
   .v2 ::selection {
     background-color: #e4cdf5;

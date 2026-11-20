@@ -37,7 +37,7 @@ export function RankMap({ before, after, keyword }: { before: RankValue[][]; aft
               aria-pressed={week === key}
               onClick={() => setWeek(key)}
               className={clsx(
-                "min-h-9 rounded-md px-3 transition-colors duration-150",
+                "min-h-11 rounded-md px-3 transition-colors duration-150 sm:min-h-9",
                 week === key ? "bg-surface text-fg shadow-sm ring-1 ring-line" : "text-muted hover:text-fg",
               )}
             >
