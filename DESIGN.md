@@ -170,3 +170,10 @@ Reuse the landing page's `Header` and `Footer` (move them into `src/components/`
 - [ ] The console has no errors or hydration warnings.
 - [ ] `npx tsc --noEmit`, `npm run lint` and `npm run build` all pass.
 - [ ] The previous version of anything redesigned is kept as a switchable backup (the team rule).
+
+## v2 landing page ("clean SaaS", current)
+
+The home page (`src/app/page.tsx`) is v2: white/neutral surfaces, one accent (purple), 1px hairlines, soft shadows, no tilts, stickers, tickers or looping motion. Its look is scoped under `.v2`, so v1 keeps working at `/v1` (backup, not indexed).
+- Tokens: `canvas`, `subtle`, `surface`, `line`, `line-strong`, `fg`, `muted`, `accent`, `accent-hover`, `accent-soft`, `accent-text` (light and dark values in `globals.css`). Use these in v2, never the v1 sticker classes (`border-ink`, `shadow-pop`, `bg-lime` …).
+- Trust proof (testimonials, stats, guarantee, founder, company) lives in `src/content/proof.ts`. Each section is hidden until its data is filled. Only real data goes there.
+- Every sample (dashboard, rank map, activity) is labelled as a sample.

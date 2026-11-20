@@ -29,8 +29,12 @@ function applyTheme(next: Theme) {
   } catch {} // private mode: still switches, just isn't remembered
 }
 
+// v1 sticker styling; v2 passes its own className.
+const STICKER =
+  "grid size-11 shrink-0 place-items-center rounded-full text-ink-2 transition-[color,background-color,rotate] duration-300 ease-[var(--ease-spring)] hover:rotate-12 hover:bg-sun hover:text-ink lg:size-10";
+
 /** Sun/moon switch. Light is the default; the visitor's pick lasts for this tab session. */
-export function ThemeToggle() {
+export function ThemeToggle({ className = STICKER }: { className?: string }) {
   const theme = useSyncExternalStore(subscribe, getTheme, () => "light" as Theme);
 
   const next: Theme = theme === "dark" ? "light" : "dark";
@@ -50,7 +54,7 @@ export function ThemeToggle() {
         applyTheme(next);
       }}
       aria-label={`Switch to ${next} theme`}
-      className="grid size-11 shrink-0 place-items-center rounded-full text-ink-2 transition-[color,background-color,rotate] duration-300 ease-[var(--ease-spring)] hover:rotate-12 hover:bg-sun hover:text-ink lg:size-10"
+      className={className}
     >
       {theme === "dark" ? <Sun className="size-5" strokeWidth={2.25} aria-hidden /> : <Moon className="size-5" strokeWidth={2.25} aria-hidden />}
     </button>

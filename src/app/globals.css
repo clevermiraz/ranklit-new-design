@@ -30,6 +30,19 @@
   --color-brand-700: #8d3ebb;
   --color-brand-800: #6f2d99;
 
+  /* v2 "clean SaaS" tokens (landing page). Neutral surfaces, one accent. Dark values are in [data-theme="dark"] below. */
+  --color-canvas: #ffffff;
+  --color-subtle: #f7f7f9;
+  --color-surface: #ffffff;
+  --color-line: #e7e7ec;
+  --color-line-strong: #d4d4dc;
+  --color-fg: #111218;
+  --color-muted: #5c6070;
+  --color-accent: #8d3ebb;
+  --color-accent-hover: #6f2d99;
+  --color-accent-soft: #f6eefb;
+  --color-accent-text: #7a33a6;
+
   --color-rank-good: #16a34a;
   --color-rank-mid: #f59e0b;
   --color-rank-bad: #ef4444;
@@ -117,6 +130,18 @@
   --color-sky: #96c5e3;
   --color-mint: #9bd5b9;
   --color-tangerine: #e68d5f;
+  /* v2 tokens */
+  --color-canvas: #0b0b0d;
+  --color-subtle: #101013;
+  --color-surface: #151518;
+  --color-line: #26262c;
+  --color-line-strong: #34343c;
+  --color-fg: #f3f3f5;
+  --color-muted: #a3a3ad;
+  --color-accent: #8d3ebb; /* buttons keep white text at 6:1 */
+  --color-accent-hover: #9b47cc;
+  --color-accent-soft: rgb(163 90 209 / 0.14);
+  --color-accent-text: #c79be6;
 }
 [data-theme="dark"] .border-ink { border-color: var(--line); }
 
@@ -347,4 +372,31 @@
 }
 @keyframes fade-only {
   from { opacity: 0; }
+}
+
+/* ---------- v2 "clean SaaS" landing page. Everything below is scoped to .v2 so /v1 keeps its look. ---------- */
+@layer base {
+  .v2 :is(h1, h2, h3, h4) {
+    font-family: var(--font-sans);
+    font-weight: 650;
+    letter-spacing: -0.025em;
+  }
+  .v2 ::selection {
+    background-color: #e4cdf5;
+    color: #111218;
+  }
+  [data-theme="dark"] .v2 ::selection {
+    background-color: rgb(163 90 209 / 0.55);
+    color: #ffffff;
+  }
+  .v2 :focus-visible {
+    outline-color: var(--color-accent);
+  }
+}
+@layer components {
+  /* Calm reveals: a short fade-up, no tilt or pop. */
+  .v2 [data-pending] [data-item],
+  .v2 [data-pending] [data-item][data-pop] {
+    transform: translateY(12px);
+  }
 }

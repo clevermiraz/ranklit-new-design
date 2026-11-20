@@ -1,3 +1,6 @@
+// BACKUP: the v1 "sticker map" landing page. Live at /v1 (not indexed). To restore it as the home page:
+//   git mv src/app/page.tsx src/app/v2-page.tsx.bak && git mv src/app/v1/page.tsx src/app/page.tsx  (then drop `metadata` below)
+import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { Check, Clock, Eye, Mail, MapPin, MessageSquareReply, QrCode, Search, Sparkles, Star, Wallet, Zap } from "lucide-react";
@@ -107,6 +110,8 @@ const FAQS = [
 const i = (n: number) => ({ "--i": n }) as CSSProperties;
 /** Load-time entrance delay for hero elements. */
 const rise = (ms: number) => ({ animationDelay: `${ms}ms` });
+
+export const metadata: Metadata = { title: "Design v1 (backup)", robots: { index: false, follow: false } };
 
 export default function HomePage() {
   return (
