@@ -38,8 +38,9 @@ const BURST = [
  * Hero: a realistic iPhone running a maps-style search. "Your business" starts buried below the
  * sheet, climbs into view and up the list while the work that earned it pops up beside the phone.
  * Shares its timeline with the backup sticker phone (useClimb in phone-sim.tsx).
+ * `calm` (unslopped v1): no hover burst, pings or spring bounces; the two callouts are quiet cards instead of tilted stickers.
  */
-export function PhoneDevice() {
+export function PhoneDevice({ calm = false }: { calm?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const { step, run, s, sc, order } = useClimb(ref);
   const top3 = s.pos <= 2;
@@ -52,7 +53,7 @@ export function PhoneDevice() {
       </p>
 
       <div aria-hidden className="group/phone relative">
-        {PHONE_HOVER === "burst" &&
+        {PHONE_HOVER === "burst" && !calm &&
           BURST.map((b) => (
             <div
               key={b.label}
@@ -91,8 +92,8 @@ export function PhoneDevice() {
 
             {/* your pin: grows and gets a label as you climb */}
             <div className="absolute z-10" style={{ left: YOU_PIN[0], top: YOU_PIN[1] }}>
-              <span key={step} className="animate-ping-once absolute top-0 left-0 size-20 -translate-1/2 rounded-full bg-[#9b47cc]/25" />
-              <div className="transition-transform duration-700 ease-[var(--ease-spring)] motion-reduce:transition-none" style={{ transform: `scale(${1 + (5 - s.pos) * 0.09})`, transformOrigin: "50% 0" }}>
+              {!calm && <span key={step} className="animate-ping-once absolute top-0 left-0 size-20 -translate-1/2 rounded-full bg-[#9b47cc]/25" />}
+              <div className={clsx("transition-transform duration-700 motion-reduce:transition-none", calm ? "ease-out" : "ease-[var(--ease-spring)]")} style={{ transform: `scale(${1 + (5 - s.pos) * 0.09})`, transformOrigin: "50% 0" }}>
                 <Pin x={0} y={0} you />
               </div>
               <span
@@ -139,7 +140,8 @@ export function PhoneDevice() {
                     <div
                       key={you ? "you" : b.name}
                       className={clsx(
-                        "absolute inset-x-0 top-0 flex items-center gap-3 border-b border-[var(--m-line)] px-4 transition-transform duration-700 ease-[var(--ease-spring)] motion-reduce:transition-none",
+                        "absolute inset-x-0 top-0 flex items-center gap-3 border-b border-[var(--m-line)] px-4 transition-transform duration-700 motion-reduce:transition-none",
+                        calm ? "ease-out" : "ease-[var(--ease-spring)]",
                         you ? "z-10 border-l-4 border-l-[#9b47cc] bg-[var(--m-you)]" : "bg-white",
                       )}
                       style={{ height: ROW, transform: `translateY(${idx * ROW}px)` }}
@@ -173,24 +175,41 @@ export function PhoneDevice() {
           </div>
         </div>
 
-        {/* What Ranklit just did */}
-        <div key={`did-${run}-${step}`} className="animate-pop absolute -top-8 -left-4 z-30 max-w-[230px] sm:-left-24">
-          <div className="flex items-center gap-2 rounded-2xl border-2 border-ink bg-white px-3 py-2 text-[13px] font-bold shadow-pop transition-[translate,rotate] duration-500 ease-[var(--ease-spring)] group-hover/phone:-translate-x-3 group-hover/phone:-translate-y-3 group-hover/phone:-rotate-3">
-            <span className="grid size-7 shrink-0 place-items-center rounded-lg border-2 border-ink bg-sun">
-              <s.icon className="size-3.5" strokeWidth={2.5} />
-            </span>
-            {s.did}
-          </div>
-        </div>
+        {calm ? (
+          <>
+            {/* What Ranklit just did: a quiet card, no pop or tilt */}
+            <div className="absolute -top-8 -left-4 z-30 flex max-w-[240px] items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-[13px] font-medium text-fg shadow-[0_1px_2px_rgb(16_24_40/0.06),0_8px_24px_-12px_rgb(16_24_40/0.2)] sm:-left-24">
+              <s.icon className="size-4 shrink-0 text-muted" strokeWidth={2} />
+              {s.did}
+            </div>
+            {/* Your rank */}
+            <div className="absolute top-[25%] -left-1 z-30 rounded-xl border border-line bg-surface px-3 py-2 shadow-[0_1px_2px_rgb(16_24_40/0.06),0_8px_24px_-12px_rgb(16_24_40/0.2)] sm:-left-28">
+              <p className="text-xs text-muted">Your rank</p>
+              <p className="text-3xl leading-tight font-semibold text-fg tabular-nums">#{s.pos + 1}</p>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* What Ranklit just did */}
+            <div key={`did-${run}-${step}`} className="animate-pop absolute -top-8 -left-4 z-30 max-w-[230px] sm:-left-24">
+              <div className="flex items-center gap-2 rounded-2xl border-2 border-ink bg-white px-3 py-2 text-[13px] font-bold shadow-pop transition-[translate,rotate] duration-500 ease-[var(--ease-spring)] group-hover/phone:-translate-x-3 group-hover/phone:-translate-y-3 group-hover/phone:-rotate-3">
+                <span className="grid size-7 shrink-0 place-items-center rounded-lg border-2 border-ink bg-sun">
+                  <s.icon className="size-3.5" strokeWidth={2.5} />
+                </span>
+                {s.did}
+              </div>
+            </div>
 
-        {/* Your rank */}
-        <div className="absolute top-[25%] -left-1 z-30 -rotate-6 rounded-2xl border-2 border-ink bg-bubblegum px-3 py-2 text-center shadow-pop transition-[translate,rotate] duration-500 ease-[var(--ease-spring)] group-hover/phone:-translate-x-4 group-hover/phone:-rotate-12 sm:-left-32">
-          <p className="text-[11px] font-extrabold tracking-wide uppercase">Your rank</p>
-          <p key={s.pos} className="animate-pop font-display text-4xl leading-none font-extrabold tabular-nums">#{s.pos + 1}</p>
-        </div>
+            {/* Your rank */}
+            <div className="absolute top-[25%] -left-1 z-30 -rotate-6 rounded-2xl border-2 border-ink bg-bubblegum px-3 py-2 text-center shadow-pop transition-[translate,rotate] duration-500 ease-[var(--ease-spring)] group-hover/phone:-translate-x-4 group-hover/phone:-rotate-12 sm:-left-32">
+              <p className="text-[11px] font-extrabold tracking-wide uppercase">Your rank</p>
+              <p key={s.pos} className="animate-pop font-display text-4xl leading-none font-extrabold tabular-nums">#{s.pos + 1}</p>
+            </div>
+          </>
+        )}
       </div>
 
-      <p className="mt-6 text-center text-xs font-medium text-ink-2">Sample animation, not a promise. Google decides rankings.</p>
+      <p className={clsx("mt-6 text-center text-xs font-medium", calm ? "text-muted" : "text-ink-2")}>Sample animation, not a promise. Google decides rankings.</p>
     </div>
   );
 }

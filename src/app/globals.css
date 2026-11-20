@@ -42,6 +42,7 @@
   --color-accent-hover: #6f2d99;
   --color-accent-soft: #f6eefb;
   --color-accent-text: #7a33a6;
+  --color-on-accent: #ffffff; /* text on accent fills (buttons) */
 
   --color-rank-good: #16a34a;
   --color-rank-mid: #f59e0b;
@@ -395,6 +396,31 @@
   .v2 :focus-visible {
     outline-color: var(--color-accent);
   }
+  /* v1 "warm & map-led" skin: Bricolage headings at a calm weight. */
+  .warm :is(h1, h2, h3) {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+}
+
+/* v1 "warm & map-led" skin (src/app/v1/page.tsx) over the shared unslopped sections. Light only; dark keeps the v2 neutrals.
+   One accent: lime fill with ink text, used on primary actions only. Links and labels stay ink/purple for contrast. */
+:root:not([data-theme="dark"]) .warm {
+  --color-canvas: #fff8ec;
+  --color-subtle: #fbf0dc;
+  --color-surface: #fffdf9;
+  --color-line: rgb(26 21 35 / 0.1);
+  --color-line-strong: rgb(26 21 35 / 0.2);
+  --color-fg: #1a1523;
+  --color-muted: #5b5367;
+  --color-accent: #c6f432;
+  --color-accent-hover: #b6e420;
+  --color-on-accent: #1a1523;
+  --color-accent-soft: #f1fbcc;
+  --color-accent-text: #6f2d99;
+}
+:root:not([data-theme="dark"]) .warm :focus-visible {
+  outline-color: #1a1523; /* lime outline would be too faint on cream */
 }
 @layer components {
   /* Calm reveals: a short fade-up, no tilt or pop. */

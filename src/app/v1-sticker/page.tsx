@@ -1,5 +1,5 @@
-// BACKUP: the v1 "sticker map" landing page. Live at /v1 (not indexed). To restore it as the home page:
-//   git mv src/app/page.tsx src/app/v2-page.tsx.bak && git mv src/app/v1/page.tsx src/app/page.tsx  (then drop `metadata` below)
+// BACKUP: the original v1 "sticker map" landing page, before its unslop pass. Live at /v1-sticker (not indexed).
+// To restore it at /v1: cp src/app/v1-sticker/page.tsx src/app/v1/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
@@ -111,7 +111,7 @@ const i = (n: number) => ({ "--i": n }) as CSSProperties;
 /** Load-time entrance delay for hero elements. */
 const rise = (ms: number) => ({ animationDelay: `${ms}ms` });
 
-export const metadata: Metadata = { title: "Design v1 (backup)", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Design v1 sticker (backup)", robots: { index: false, follow: false } };
 
 export default function HomePage() {
   return (

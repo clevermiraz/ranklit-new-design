@@ -171,6 +171,17 @@ Reuse the landing page's `Header` and `Footer` (move them into `src/components/`
 - [ ] `npx tsc --noEmit`, `npm run lint` and `npm run build` all pass.
 - [ ] The previous version of anything redesigned is kept as a switchable backup (the team rule).
 
+## Routes and skins (current)
+
+| Route | File | What it is |
+| --- | --- | --- |
+| `/` | `src/app/page.tsx` | **Live.** Unslopped landing, v2 "clean SaaS" skin, static dashboard hero |
+| `/v1` | `src/app/v1/page.tsx` | Unslopped v1, "warm & map-led" skin (`.warm`: cream, ink, lime action, Bricolage 600) with the calm phone hero (`<PhoneDevice calm />`) |
+| `/v1-sticker` | `src/app/v1-sticker/page.tsx` | Backup: original sticker v1 |
+| `/v2` | `src/app/v2/page.tsx` | Backup: v2 before its unslop pass |
+
+`/` and `/v1` render the same sections from `src/components/v2/landing.tsx` (`<Landing visual={…} className={…} />`), so copy edits there apply to both. A skin is only token overrides (see `.warm` in `globals.css`). All non-home routes are `noindex`.
+
 ## Current landing page: v2 + unslop pass
 
 The home page (`src/app/page.tsx`) is v2 after an unslop pass ([heydamir/unslop](https://github.com/heydamir/unslop), CC BY 4.0). The pre-pass v2 is kept at `/v2` (`src/app/v2/page.tsx`, not indexed). It is v2: white/neutral surfaces, one accent (purple), 1px hairlines, soft shadows, no tilts, stickers, tickers or looping motion. Its look is scoped under `.v2`, so v1 keeps working at `/v1` (backup, not indexed).

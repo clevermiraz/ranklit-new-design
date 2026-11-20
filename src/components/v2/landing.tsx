@@ -1,5 +1,7 @@
-// v3 landing page: v2 after an unslop pass (no colour washes, glows, decorative icons, pill badges or scroll motion).
-// Backups: src/app/v2/page.tsx (/v2) and src/app/v1/page.tsx (/v1, sticker map). Neither is indexed.
+// The unslopped landing page, shared by two skins:
+//   /    (src/app/page.tsx)    v2 "clean SaaS": neutral surfaces, purple action, static dashboard hero
+//   /v1  (src/app/v1/page.tsx) v1 "warm & map-led": `.warm` skin (cream, ink, lime action, Bricolage) + the phone hero
+// Backups (not indexed): /v2 (v2 before unslop), /v1-sticker (original sticker v1).
 // Trust proof (testimonials, stats, guarantee, founder, company) comes from src/content/proof.ts and stays hidden until filled.
 import Image from "next/image";
 import Link from "next/link";
@@ -126,18 +128,19 @@ const NAV = [
   ["FAQ", "#faq"],
 ] as const;
 
-export default function HomePage() {
+/** The whole page. `visual` is the hero's product view; `className` adds a skin (e.g. "warm"). */
+export function Landing({ visual, className }: { visual: ReactNode; className?: string }) {
   return (
-    <div className="v2 min-h-dvh bg-canvas text-fg">
+    <div className={clsx("v2 min-h-dvh bg-canvas text-fg", className)}>
       <a
         href="#main"
-        className="sr-only z-[60] rounded-lg bg-accent px-4 py-2 font-semibold text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+        className="sr-only z-[60] rounded-lg bg-accent px-4 py-2 font-semibold text-on-accent focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
       >
         Skip to content
       </a>
       <Header />
       <main id="main" tabIndex={-1} className="outline-none">
-        <Hero />
+        <Hero visual={visual} />
         <Industries />
         <Problem />
         <Features />
@@ -175,7 +178,7 @@ function Button({
       className={clsx(
         "group/btn inline-flex items-center justify-center gap-2 rounded-lg font-semibold whitespace-nowrap transition-colors duration-150",
         variant === "primary"
-          ? "bg-accent text-white shadow-[0_1px_2px_rgb(16_24_40/0.12)] hover:bg-accent-hover"
+          ? "bg-accent text-on-accent shadow-[0_1px_2px_rgb(16_24_40/0.12)] hover:bg-accent-hover"
           : "border border-line-strong bg-surface text-fg hover:bg-subtle",
         size === "lg" ? "min-h-12 px-5 text-[15px]" : "min-h-11 px-4 text-sm sm:min-h-10",
         className,
@@ -234,7 +237,7 @@ function Header() {
   );
 }
 
-function Hero() {
+function Hero({ visual }: { visual: ReactNode }) {
   return (
     <section className="relative overflow-hidden">
       <Container className="relative grid grid-cols-1 items-center gap-14 pt-16 pb-16 sm:pt-24 lg:grid-cols-[1fr_1.05fr] lg:gap-12 lg:pb-24">
@@ -257,7 +260,7 @@ function Hero() {
           </div>
           <TrustLine className="mt-6" />
         </div>
-        <Dashboard />
+        {visual}
       </Container>
       <Stats />
     </section>
@@ -265,7 +268,7 @@ function Hero() {
 }
 
 /** A calm, static preview of the product: this week's numbers, the rank map and the activity log. */
-function Dashboard() {
+export function Dashboard() {
   const now = gridStats(LATEST_SCAN);
   const then = gridStats(FIRST_SCAN);
   return (
